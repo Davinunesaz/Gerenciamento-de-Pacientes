@@ -2,18 +2,57 @@
 import { useEffect, useState } from "react";
 import Navbar from "./components/navbar";
 import Section from "./components/Section";
-import { Patient } from "./types/paciente"; 
+import { Patient } from "./types/paciente";
 
 export default function Home() {
   const [internados, setInternados] = useState<Patient[]>([]);
   const [liberados, setLiberados] = useState<Patient[]>([]);
   const [aguardando, setAguardando] = useState<Patient[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/pacientes/internados").then(res => res.json()).then(setInternados);
-    fetch("/api/pacientes/liberados").then(res => res.json()).then(setLiberados);
-    fetch("/api/pacientes/aguardando").then(res => res.json()).then(setAguardando);
+    const fetchPacientes = async () => {
+      try {
+        const [resInternado, resLiberado, resAguardando] = await Promise.all([
+          fetch("http://localhost:3001/api/internado"),
+          fetch("http://localhost:3001/api/liberado"),
+          fetch("http://localhost:3001/api/Analise"),
+        ]);
+
+        const dataInternado = await resInternado.json();
+        const dataLiberado = await resLiberado.json();
+        const dataAguardando = await resAguardando.json();
+
+        
+      console.log("Internados:", dataInternado);
+      console.log("Liberados:", dataLiberado);
+      console.log("Aguardando:", dataAguardando);
+
+        // Corrigido: acesso ao campo .pacientes
+       setInternados(Array.isArray(dataInternado.filtroInternado) ? dataInternado.filtroInternado : []);
+      setLiberados(Array.isArray(dataLiberado.filtroLiberado) ? dataLiberado.filtroLiberado : []);
+      setAguardando(Array.isArray(dataAguardando.filtroAnalise) ? dataAguardando.filtroAnalise : []);
+
+      } catch (err) {
+        console.error("Erro ao buscar pacientes:", err);
+        setInternados([]);
+        setLiberados([]);
+        setAguardando([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPacientes();
   }, []);
+
+  if (loading) {
+    return (
+      <main className="h-screen flex items-center justify-center">
+        <p className="text-lg font-semibold">Carregando pacientes...</p>
+      </main>
+    );
+  }
 
   return (
     <main className="scroll-smooth font-sans">
@@ -21,7 +60,7 @@ export default function Home() {
       <div className="pt-24">
         <Section id="internados" title="Pacientes Internados" pacientes={internados} />
         <Section id="liberados" title="Pacientes Liberados" pacientes={liberados} />
-        <Section id="aguardando" title="Pacientes Aguardando Atendimento" pacientes={aguardando} />
+        <Section id="em-analise" title="Pacientes Em Análise" pacientes={aguardando} />
       </div>
     </main>
   );

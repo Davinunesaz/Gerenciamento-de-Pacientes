@@ -4,7 +4,7 @@ export default function Navbar() {
       <ul className="flex justify-center gap-8 py-4 font-semibold text-blue-600">
         <li><a href="#internados" className="hover:underline">Internados</a></li>
         <li><a href="#liberados" className="hover:underline">Liberados</a></li>
-        <li><a href="#aguardando" className="hover:underline">Aguardando</a></li>
+        <li><a href="#aguardando" className="hover:underline">Em análise</a></li>
       </ul>
     </nav>
   );

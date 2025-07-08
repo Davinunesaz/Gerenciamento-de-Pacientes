@@ -2,5 +2,5 @@ export interface Patient {
   id: number;
   nome: string;
   idade: number;
-  status: 'internado' | 'liberado' | 'aguardando';
+  status: 'internado' | 'liberado' | 'Em análise';
 }
