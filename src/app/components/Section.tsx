@@ -4,6 +4,7 @@ import { Patient } from "../types/paciente";
 interface SectionProps {
   id: string;
   title: string;
+  status?: 'Internado' | 'Liberado' | 'Em Análise';
   pacientes: Patient[];
 }
 

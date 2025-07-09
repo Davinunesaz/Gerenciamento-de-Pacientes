@@ -14,9 +14,9 @@ export default function Home() {
     const fetchPacientes = async () => {
       try {
         const [resInternado, resLiberado, resAguardando] = await Promise.all([
-          fetch("http://localhost:3001/api/internado"),
-          fetch("http://localhost:3001/api/liberado"),
-          fetch("http://localhost:3001/api/Analise"),
+          fetch("https://api-gerenciamento-de-paciente.onrender.com/api/internado"),
+          fetch("https://api-gerenciamento-de-paciente.onrender.com/api/liberado"),
+          fetch("https://api-gerenciamento-de-paciente.onrender.com/api/Analise"),
         ]);
 
         const dataInternado = await resInternado.json();
@@ -53,6 +53,8 @@ export default function Home() {
       </main>
     );
   }
+
+  
 
   return (
     <main className="scroll-smooth font-sans">
